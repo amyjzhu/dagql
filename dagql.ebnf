@@ -25,3 +25,14 @@ num-expr = NUM
 (* || is string concat, as in standard SQL *)
 str-expr = STR
          | str-expr "||" str-expr
+         
+(* Precedence Table for operators (tightest to loosest)
+   + - (unary)
+   * /
+   + - (binary) 
+   ||
+   = <> < > <= >=
+   NOT
+   AND
+   OR
+*)   
