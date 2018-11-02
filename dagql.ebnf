@@ -12,6 +12,7 @@ cond = "TRUE"
      | "FALSE"
      | expr (">" | "<" | ">=" | "<=" | "=" | "<>") expr
      | "NOT" cond
+     | cond ("AND" | "OR") cond
  
 expr = num-expr | str-expr | "(" expr ")"
 
