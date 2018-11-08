@@ -5,7 +5,7 @@ query = "SELECT" (attr ("," attr)* | "*")
         ("WHERE" cond)?
         ("LIMIT" num-expr)?
 
-(* attr will just be a valid indentifier in DAGQL. Not sure if SQL supports anything else. *)
+(* attr will just be a valid indentifier in DAGQL. )
 attr = ID
 
 cond = "TRUE"
@@ -13,8 +13,10 @@ cond = "TRUE"
      | expr (">" | "<" | ">=" | "<=" | "=" | "<>") expr
      | "NOT" cond
      | cond ("AND" | "OR") cond
+     | "(" cond ")"
  
-expr = num-expr | str-expr | "(" expr ")"
+ (* it's legal to use values selected from the graph in expressions *)
+expr = num-expr | str-expr | "(" expr ")" | attr
 
 (* NUM is a numeric literal, I'll omit it for now from the EBNF *)
 num-expr = NUM
