@@ -1,11 +1,22 @@
 -- Simple query
 SELECT * FROM NODES
+SELECT * FROM EDGES
+
+-- Nested Query
+SELECT * FROM SELECT a FROM EDGES
+SELECT * FROM (SELECT a FROM EDGES)
 
 -- Query with WHERE
 SELECT a FROM EDGES WHERE TRUE
+SELECT a FROM EDGES WHERE FALSE
+SELECT * FROM EDGES WHERE type = "process_memory"
+SELECT * FROM EDGES WHERE NOT type = "process_memory"
+SELECT * FROM EDGES WHERE type = "process_memory" AND id = 24102
+SELECT * FROM EDGES WHERE type = "process_memory" OR type = "task"
 
 -- Query specifying how to traverse
 SELECT a, b FROM NODES TRAVERSING BY DEPTH 
+SELECT a, b FROM NODES TRAVERSING BY TOPOLOGICAL
 
 -- Query specifiying a limit
 SELECT * FROM EDGES LIMIT 10
