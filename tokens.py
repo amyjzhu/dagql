@@ -7,34 +7,48 @@ def auto():
         num += 1
 
 class TokenTypes(Enum):
-    MATCH    = auto()
-    WHERE    = auto()
-    OPTIONAL = auto()
-    WITH     = auto()
-    RETURN   = auto()
-    ORDER    = auto()
+    # keywords
+    SELECT   = auto()
+    FROM     = auto()
+    EDGES    = auto()
+    NODES    = auto()
+    TRAVERSE = auto()
     BY       = auto()
-    CREATE   = auto()
-    DELETE   = auto()
-    SET      = auto()
-    REMOVE   = auto()
-    MERGE    = auto()
+    DEPTH    = auto()
+    BREADTH  = auto()
+    WHERE    = auto()
+    LIMIT    = auto()
     
+    # booleans
+    TRUE     = auto()
+    FALSE    = auto()
+
+    # parentheses
     LPAR     = auto()
     RPAR     = auto()
-    LBRC     = auto()
-    RBRC     = auto()
-    LSQB     = auto()
-    RSQB     = auto()
 
-    COLON    = auto()
-    RARR     = auto()
-    DASH     = auto()
-    DOT      = auto()
-    COMMA    = auto()
+    # logical operators
+    NOT  = auto()
+    
+    # other operators
+    GT    = auto()  # >
+    LT    = auto()  # <
+    GTEQ  = auto()  # >=
+    LTEQ  = auto()  # <=
+    EQ    = auto()  # = 
+    LTGT  = auto()  # <>
+    PLUS  = auto()  # +
+    MINUS = auto()  # -
+    STAR  = auto()  # *
+    SLASH = auto()  # /
+    DBAR  = auto()  # ||
  
+    # types and identifiers
+    NUM    = auto()
     STR    = auto()
     ID     = auto()
+    
+    # end of line / end of file
     EOL    = auto()
     EOF    = auto()
 
