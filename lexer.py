@@ -120,6 +120,7 @@ class Lexer(object):
             elif self.current_char.isalnum() or self.current_char == "_": self._id()
             elif self.current_char == "(": self._add_token1(TokenTypes.LPAR)
             elif self.current_char == ")": self._add_token1(TokenTypes.RPAR)
+            elif self.current_char == ",": self._add_token1(TokenTypes.COMMA)
             elif self._peek() is not None and self.current_char + self._peek() in (">=", "<=", "<>", "||"): self._add_token2(TokenTypes.OP)
             elif self.current_char in (">", "<", "=", "+", "-", "/", "*"): self._add_token1(TokenTypes.OP)
             else: self._error("unknown sequence.")

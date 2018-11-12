@@ -8,24 +8,27 @@ def auto():
 
 class TokenTypes(Enum):
     # keywords
-    KW   = auto() # SELECT, FROM, EDGES, NODES, TRAVERSE, BY, DEPTH, BREADTH, WHERE, LIMIT
+    KW    = auto() # SELECT, FROM, EDGES, NODES, TRAVERSE, BY, DEPTH, BREADTH, WHERE, LIMIT
     
     # parentheses
-    LPAR = auto()
-    RPAR = auto()
+    LPAR  = auto()
+    RPAR  = auto()
+
+    # comma
+    COMMA = auto()
 
     # operators
-    OP   = auto() # AND, OR, NOT, >, <, >=, <=, =, <>, +, -, /, *, ||
+    OP    = auto() # AND, OR, NOT, >, <, >=, <=, =, <>, +, -, /, *, ||
     
     # types and identifiers
-    BOOL = auto()
-    NUM  = auto()
-    STR  = auto()
-    ID   = auto()
+    BOOL  = auto()
+    NUM   = auto()
+    STR   = auto()
+    ID    = auto()
     
     # end of line / end of file
-    EOL  = auto()
-    EOF  = auto()
+    EOL   = auto()
+    EOF   = auto()
 
 class Token(object):
     def __init__(self, token_type: TokenTypes, token_value: any, line: int):
