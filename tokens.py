@@ -32,6 +32,8 @@ class Token(object):
         self.type = token_type
         self.value = token_value
         self.line = line
+    def __eq__(self, other):
+        return self.type == other.type and self.value == other.value and self.line == other.line
     def __str__(self) -> str:
         return "Token(%s, %s)" % (self.type, repr(self.value))
     __repr__ = __str__
