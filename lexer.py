@@ -32,7 +32,7 @@ class Lexer:
         self.current_char = self.text[0] # current char
         self.tokens = []         # tokens so far
     def _error(self, msg):
-        raise LexingError("LexingError, line " + str(self.line) + ": " + msg + ".")
+        raise LexingError("Error in line " + str(self.line) + ": " + msg)
     def _peek(self, lookahead=1):
         _peek_pos = self.pos + lookahead
         if _peek_pos >= len(self.text):
@@ -49,10 +49,10 @@ class Lexer:
             self.current_char = None
     def _eat_white_space(self):
         while self.current_char == " ": self._advance()
-    def _add_token1(self, token_type):
+    def _add_token_1_char(self, token_type):
         self.tokens.append(Token(token_type, self.current_char, self.line))
         self._advance()
-    def _add_token2(self, token_type):
+    def _add_token_2_char(self, token_type):
         self.tokens.append(Token(token_type, self.current_char + self._peek(), self.line))
         self._advance()
         self._advance()
@@ -115,10 +115,10 @@ class Lexer:
             elif self.current_char.isdigit() or self.current_char == '.': # numbers
                 self._num()
             elif self.current_char.isalnum() or self.current_char == "_": self._id()
-            elif self.current_char == "(": self._add_token1(TokenTypes.LPAR)
-            elif self.current_char == ")": self._add_token1(TokenTypes.RPAR)
-            elif self.current_char == ",": self._add_token1(TokenTypes.COMMA)
-            elif self._peek() is not None and self.current_char + self._peek() in (">=", "<=", "<>", "||"): self._add_token2(TokenTypes.OP)
-            elif self.current_char in (">", "<", "=", "+", "-", "/", "*"): self._add_token1(TokenTypes.OP)
-            else: self._error("unknown sequence.")
+            elif self.current_char == "(": self._add_token_1_char(TokenTypes.LPAR)
+            elif self.current_char == ")": self._add_token_1_char(TokenTypes.RPAR)
+            elif self.current_char == ",": self._add_token_1_char(TokenTypes.COMMA)
+            elif self._peek() is not None and self.current_char + self._peek() in (">=", "<=", "<>", "||"): self._add_token_2_char(TokenTypes.OP)
+            elif self.current_char in (">", "<", "=", "+", "-", "/", "*"): self._add_token_1_char(TokenTypes.OP)
+            else: self._error("unknown sequence")
         return self.tokens
