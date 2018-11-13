@@ -30,7 +30,7 @@ class TokenTypes(Enum):
     EOL   = auto()
     EOF   = auto()
 
-class Token(object):
+class Token:
     def __init__(self, token_type: TokenTypes, token_value: any, line: int):
         self.type = token_type
         self.value = token_value

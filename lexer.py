@@ -1,11 +1,5 @@
 from tokens import TokenTypes, Token
 
-###############################################################################
-#                                                                             #
-#   LEXER                                                                     #
-#                                                                             #
-###############################################################################
-
 ESCCHARS = {
     "n":  "\n",
     "t":  "\t",
@@ -15,27 +9,30 @@ ESCCHARS = {
 }
 
 RESERVED_WORDS = {
-            "SELECT",
-            "FROM",
-            "EDGES",
-            "NODES",
-            "TRAVERSE",
-            "BY",
-            "DEPTH",
-            "BREADTH",
-            "WHERE",
-            "LIMIT",
+    "SELECT",
+    "FROM",
+    "EDGES",
+    "NODES",
+    "TRAVERSE",
+    "BY",
+    "DEPTH",
+    "BREADTH",
+    "WHERE",
+    "LIMIT",
 }
 
-class Lexer(object):
+class LexingError(Exception):
+    pass
+
+class Lexer:
     def __init__(self, text):
         self.text = text         # string input
         self.pos = 0             # self.pos is index into self.text
         self.line = 1            # current line
         self.current_char = self.text[0] # current char
         self.tokens = []         # tokens so far
-    def _error(self, msg=""):
-        raise Exception("LexingError, line %s: " + msg + "." % self.line)
+    def _error(self, msg):
+        raise LexingError("LexingError, line " + str(self.line) + ": " + msg + ".")
     def _peek(self, lookahead=1):
         _peek_pos = self.pos + lookahead
         if _peek_pos >= len(self.text):
@@ -109,13 +106,13 @@ class Lexer(object):
                 self._advance()
             if self.pos >= len(text):
                 self.tokens.append(Token(TokenTypes.EOF, None, self.line))
-            elif self.current_char == "-" and self._peek() == "-":   # inline comments
+            elif self.current_char == "-" and self._peek() == "-": # inline comments
                 while self.current_char != "\n" and self.current_char != None:
                     self._advance()
-            elif self.current_char == "'":                          # strings
+            elif self.current_char == "'": # strings
                 self._advance()
                 self._str()
-            elif self.current_char.isdigit() or self.current_char == '.':                       # numbers
+            elif self.current_char.isdigit() or self.current_char == '.': # numbers
                 self._num()
             elif self.current_char.isalnum() or self.current_char == "_": self._id()
             elif self.current_char == "(": self._add_token1(TokenTypes.LPAR)
