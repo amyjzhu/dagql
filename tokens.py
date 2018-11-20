@@ -14,6 +14,9 @@ class TokenTypes(Enum):
     LPAR  = auto()
     RPAR  = auto()
 
+    # star (for SELECT queries)
+    STAR = auto()
+
     # comma
     COMMA = auto()
 

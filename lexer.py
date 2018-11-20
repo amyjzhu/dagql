@@ -115,6 +115,10 @@ class Lexer:
             elif self.current_char.isdigit() or self.current_char == '.': # numbers
                 self._num()
             elif self.current_char.isalnum() or self.current_char == "_": self._id()
+            elif (self.tokens[-1].type is TokenTypes.KW and
+                    self.tokens[-1].value == "SELECT" and
+                    self.current_char == '*'):
+                self._add_token_1_char(TokenTypes.STAR)
             elif self.current_char == "(": self._add_token_1_char(TokenTypes.LPAR)
             elif self.current_char == ")": self._add_token_1_char(TokenTypes.RPAR)
             elif self.current_char == ",": self._add_token_1_char(TokenTypes.COMMA)

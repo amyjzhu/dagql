@@ -31,8 +31,55 @@ class Parser(object):
             return result
         else:
             self.error(token_type)
+    def eat_kw(self, *args):
+        print(self.current_token)
+        if self.current_token.type is TokenTypes.KW and self.current_token.value in args:
+            result = self.current_token
+            self.advance()
+            return result
+        else:
+            self.error(TokenTypes.KW)
     def program(self):
         return self.select()
+    def select(self):
+        self.eat_kw("SELECT")
+        cols = []
+        if self.current_token.type is TokenTypes.STAR:
+            self.eat(TokenTypes.STAR)
+        else:
+            while self.current_token.type is TokenTypes.ID:
+                cols.append(Var(self.eat(TokenTypes.ID)))
+                if self.current_token.types is not TokenTypes.COMMA:
+                    break
+                self.eat(TokenTypes.COMMA)
+        self.eat(TokenTypes.FROM)
+        subquery = None
+        if self.current_token.type is TokenTypes.KW:
+            subquery = self.eat_kw("NODES", "EDGES")
+        else:
+            self.eat(TokenTypes.LPAREN)
+            subquery = self.select()
+            self.eat(TokenTypes.RPAREN)
+        traversal_order = None
+        if self.current_token.type is TokenTypes.KW and self.current_token.value == "TRAVERSE":
+            self.eat_kw("TRAVERSE")
+            self.eat_kw("BY")
+            traversal_order = self.eat_kw("DEPTH", "BREADTH")
+        cond = None
+        if self.current_token.type is TokenTypes.KW and self.current_token.value == "WHERE":
+            self.eat_kw("WHERE")
+            self.cond = self.expr()
+        limit = None
+        if self.current_token.type is TokenTypes.KW and self.current_token.value == "LIMIT":
+            self.eat_kw("LIMIT")
+            self.limit = self.expr()
+        tmp = SelectNode(cols, subquery, traversal_order)
+        if cond:
+            tmp = WhereNode(tmp, cond)
+        if limit:
+            tmp = LimitNode(tmp, limit)
+        return tmp
+
     def expr(self):
         """ Precedence Table for operators (tightest to loosest)
            + - (unary)
