@@ -1,0 +1,13 @@
+[MESSAGES CONTROL]
+disable=fixme,
+        invalid-name,
+        locally-disabled,
+        missing-docstring,
+        too-few-public-methods,
+        too-many-public-methods,
+        too-many-locals,
+        wrong-import-position
+max-args=8
+[BASIC]
+# Top level variables are not necessarily constants
+const-rgx=([a-z_][a-z0-9_]{2,30}|(([A-Z_][A-Z0-9_]*)|(__.*__)))$

@@ -1,7 +1,5 @@
-from lexer import Lexer
-from tokens import TokenTypes, Token
-
-
+from dagql.lexer import Lexer
+from dagql.tokens import TokenTypes, Token
 
 
 def test_all():
