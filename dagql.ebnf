@@ -1,6 +1,6 @@
 (* we possibly do not want to include sub-queries in FROM *)
 query = "SELECT" (attr ("," attr)* | "*")
-        "FROM" ("EDGES" | "NODES" | query | "(" query ")")
+        "FROM" ("EDGES" | "NODES" | "(" query ")")
         ("TRAVERSE" "BY" ("DEPTH" | "BREADTH"))?
         ("WHERE" cond)?
         ("LIMIT" num-expr)?

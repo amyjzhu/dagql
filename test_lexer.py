@@ -41,7 +41,7 @@ def test_comment():
     t = l.lex()
     assert(t == [
       Token(TokenTypes.KW, "SELECT", 2),
-      Token(TokenTypes.OP, "*", 2),
+      Token(TokenTypes.STAR, "*", 2),
       Token(TokenTypes.KW, "FROM", 2),
       Token(TokenTypes.KW, "NODES", 2),
     ])
