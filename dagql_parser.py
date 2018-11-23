@@ -1,5 +1,5 @@
 from tokens import TokenTypes, Token
-from ast import *
+from asts import *
 
 ###############################################################################
 #                                                                             #
@@ -24,7 +24,7 @@ class Parser(object):
         raise Exception("Expected %s Token in line %s, got %s" % \
             (token_type, self.current_token.line, self.current_token.type))
     def eat(self, token_type):
-        print(self.current_token)
+        # print(self.current_token)
         if self.current_token.type is token_type:
             result = self.current_token
             self.advance()
@@ -32,7 +32,7 @@ class Parser(object):
         else:
             self.error(token_type)
     def eat_kw(self, *args):
-        print(self.current_token)
+        # print(self.current_token)
         if self.current_token.type is TokenTypes.KW and self.current_token.value in args:
             result = self.current_token
             self.advance()
@@ -49,17 +49,17 @@ class Parser(object):
         else:
             while self.current_token.type is TokenTypes.ID:
                 cols.append(Var(self.eat(TokenTypes.ID)))
-                if self.current_token.types is not TokenTypes.COMMA:
+                if self.current_token.type is not TokenTypes.COMMA:
                     break
                 self.eat(TokenTypes.COMMA)
-        self.eat(TokenTypes.FROM)
+        self.eat_kw("FROM")
         subquery = None
         if self.current_token.type is TokenTypes.KW:
             subquery = self.eat_kw("NODES", "EDGES")
         else:
-            self.eat(TokenTypes.LPAREN)
+            self.eat(TokenTypes.LPAR)
             subquery = self.select()
-            self.eat(TokenTypes.RPAREN)
+            self.eat(TokenTypes.RPAR)
         traversal_order = None
         if self.current_token.type is TokenTypes.KW and self.current_token.value == "TRAVERSE":
             self.eat_kw("TRAVERSE")
@@ -139,10 +139,10 @@ class Parser(object):
             return UnOp(op, self.unop())
         return self.literal()
     def literal(self):
-        if self.current_token.type is TokenTypes.LPAREN:
-            self.eat(TokenTypes.LPAREN)
+        if self.current_token.type is TokenTypes.LPAR:
+            self.eat(TokenTypes.LPAR)
             expr = self.expr()
-            self.eat(TokenTypes.RPAREN)
+            self.eat(TokenTypes.RPAR)
             return expr
         elif self.current_token.type is TokenTypes.ID:
             var = self.eat(TokenTypes.ID)
