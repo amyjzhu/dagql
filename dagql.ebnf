@@ -1,34 +1,42 @@
-(* we possibly do not want to include sub-queries in FROM *)
-query = "SELECT" (attr ("," attr)* | "*")
-        "FROM" ("EDGES" | "NODES" | "(" query ")")
-        ("TRAVERSE" "BY" ("DEPTH" | "BREADTH"))?
-        ("WHERE" cond)?
-        ("LIMIT" num-expr)?
+(* queries *)
+query = edge-query | node-query
 
-(* attr will just be a valid indentifier in DAGQL. )
+edge-query = "SELECT" attr "(" attr "," attr ")"
+             ("FROM" ( "(" edge-query ")" | edge-query)?
+             ("TRAVERSE" "BY" ("DEPTH" | "BREADTH"))?
+             ("WHERE" expr)?
+             ("LIMIT" expr)?
+
+node-query = "SELECT" attr
+             ("FROM" ( "(" node-query ")" | node-query)?
+             ("TRAVERSE" "BY" ("DEPTH" | "BREADTH"))?
+             ("WHERE" expr)?
+             ("LIMIT" expr)?
+
+(* attr will just be a valid indentifier in DAGQL. *)
 attr = ID
 
-cond = "TRUE"
-     | "FALSE"
-     | expr (">" | "<" | ">=" | "<=" | "=" | "<>") expr
-     | "NOT" cond
-     | cond ("AND" | "OR") cond
-     | "(" cond ")"
- 
- (* it's legal to use values selected from the graph in expressions *)
-expr = num-expr | str-expr | "(" expr ")" | attr
+(* expressions *)
+expr = or-expr
+or-expr = and-expr ("OR" and-expr)*
+and-expr = not-expr ("AND" not-expr)*
+not-expr = "NOT" not-expr | comparison-expr
+comparison-expr = concat-expr (("=" | "<>" | ">" | "<" | ">=" | "<=") concat-expr)*
+concat-expr = add-expr ("||" add-expr)*
+add-expr = mul-expr (("+" | "-") mul-expr)*
+mul-expr = unary-expr (("*" | "/") unary-expr)*
+unary-expr = ("+" | "-") unary-expr | attr-expr
+attr-expr = attr | attr "." attr | literal
+literal = BOOL | STR | NUM
 
-(* NUM is a numeric literal, I'll omit it for now from the EBNF *)
-num-expr = NUM
-         | ("+" | "-") num-expr
-         | num-expr ("+" | "-" | "*" | "/") num-expr
-         
-(* STR is a string literal, I'll omit details for now from the EBNF *)
-(* || is string concat, as in standard SQL *)
-str-expr = STR
-         | str-expr "||" str-expr
-         
+(* terminals *)
+ID = [_A-Za-z][_A-Za-z0-9]*
+BOOL = "FALSE" | "TRUE"
+STR  = "'" [^']* "'"
+NUM  = [0-9]+
+
 (* Precedence Table for operators (tightest to loosest)
+   .
    + - (unary)
    * /
    + - (binary) 
@@ -37,4 +45,4 @@ str-expr = STR
    NOT
    AND
    OR
-*)   
+*)
