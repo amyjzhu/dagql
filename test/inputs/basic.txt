@@ -1,0 +1,26 @@
+EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)
+RPC: Registered named UNIX socket transport module.
+RPC: Registered udp transport module.
+RPC: Registered tcp transport module.
+RPC: Registered tcp NFSv4.1 backchannel transport module.
+Provenance: machine ID 22158728
+Provenance: boot ID 10
+IPv6: ADDRCONF(NETDEV_UP): enp0s3: link is not ready
+IPv6: ADDRCONF(NETDEV_UP): enp0s3: link is not ready
+e1000: enp0s3 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX
+IPv6: ADDRCONF(NETDEV_CHANGE): enp0s3: link becomes ready
+bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+Provenance: loading new query... (provenance2json)
+dagql: #start
+Provenance: registering policy hook...
+dagql: [{"id": 359380, "type": "path", "machine_id": 22158728, "boot_id": 10, "path": "/525/cgroup"}, {"id": 2309079, "machine_id": 22158728, "boot_id": 10, "type": "named", "allowed": 0}, {"id": 359379, "type": "file", "machine_id": 22158728, "boot_id": 10, "inode": 144143, "mode": 33060}]
+irrelevant: I'm a message!
+irrelevant: I'm a message!
+irrelevant: I'm a message!
+irrelevant: I'm a message!
+irrelevant: I'm a message!
+dagql: [{"id": 359384, "type": "file", "machine_id": 22158728, "boot_id": 10, "inode": 144141, "mode": 33060}, {"id": 2309085, "machine_id": 22158728, "boot_id": 10, "type": "perm_read", "allowed": 0}, {"id": 31996, "type": "task", "machine_id": 22158728, "boot_id": 0}]
+dagql: [{"id": 359384, "type": "file", "machine_id": 22158728, "boot_id": 10, "inode": 144141, "mode": 33060}, {"id": 2309086, "machine_id": 22158728, "boot_id": 10, "type": "version_entity", "allowed": 0}, {"id": 359389, "type": "file", "machine_id": 22158728, "boot_id": 10, "inode": 144141, "mode": 33206}]
+irrelevant: I'm a message!
+dagql: [{"id": 218451, "type": "path", "machine_id": 22158728, "boot_id": 10, "path": "/usr/bin/grep"}, {"id": 1580694, "machine_id": 22158728, "boot_id": 10, "type": "named", "allowed": 0}, {"id": 218450, "type": "file", "machine_id": 22158728, "boot_id": 10, "inode": 793325, "mode": 33261}]
+irrelevant: I'm a message!
