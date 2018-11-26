@@ -110,6 +110,8 @@ class Lexer:
             elif self.current_char == "'": # strings
                 self._advance()
                 self._str()
+            elif self.current_char == '.' and self._peek() and not self._peek().isnum():
+                self._add_token_1_char(TokenTypes.DOT)
             elif self.current_char.isdigit() or self.current_char == '.': # numbers
                 self._num()
             elif self.current_char.isalnum() or self.current_char == "_": self._id()
@@ -117,8 +119,6 @@ class Lexer:
             elif self.current_char == ")": self._add_token_1_char(TokenTypes.RPAR)
             elif self.current_char == ",": self._add_token_1_char(TokenTypes.COMMA)
             elif self._peek() is not None and self.current_char + self._peek() in (">=", "<=", "<>", "||"): self._add_token_2_char(TokenTypes.OP)
-            elif self.current_char == '.' and self._peek() and not self._peek().isnum():
-                self._add_token_1_char(TokenTypes.DOT)
             elif self.current_char in (">", "<", "=", "+", "-", "/", "*"): self._add_token_1_char(TokenTypes.OP)
             else: self._error("unknown sequence")
         return self.tokens
