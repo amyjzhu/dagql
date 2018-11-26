@@ -21,13 +21,13 @@ def test_no_instantiate_backend():
 def test_smoke():
     """Simple smoke test to make sure nothing blows up."""
     cf = CamFlowBackend()
-    for _ in cf.walk(TraversalOrder.DFS):
+    for _ in cf.walk_nodes(TraversalOrder.DFS):
         pass
 
 BASIC_MSGBUF = os.path.join(os.path.dirname(__file__), "inputs", "basic.txt")
-def test_basic():
+def test_nodewalk_dfs():
     cf = CamFlowBackend(open(BASIC_MSGBUF, 'rb'))
-    it = cf.walk(TraversalOrder.DFS)
+    it = cf.walk_nodes(TraversalOrder.DFS)
 
     node = next(it)
     assert node['id'] == 218451
@@ -68,10 +68,9 @@ def test_basic():
     except StopIteration:
         pass
 
-
-def test_basic_bfs():
+def test_nodewalk_bfs():
     cf = CamFlowBackend(open(BASIC_MSGBUF, 'rb'))
-    it = cf.walk(TraversalOrder.BFS)
+    it = cf.walk_nodes(TraversalOrder.BFS)
 
     node = next(it)
     assert node['id'] == 218451
@@ -100,15 +99,100 @@ def test_basic_bfs():
     except StopIteration:
         pass
 
+EDGES_MSGBUF = os.path.join(os.path.dirname(__file__), "inputs", "edges.txt")
+def test_edgewalk_dfs():
+    cf = CamFlowBackend(open(EDGES_MSGBUF, 'rb'))
+    it = cf.walk_edges(TraversalOrder.DFS)
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 1
+    assert from_['id'] == 1
+    assert to['id'] == 2
+    assert edge['type'] == 'named'
+    assert edge['allowed'] == 0
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 2
+    assert from_['id'] == 2
+    assert to['id'] == 3
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 3
+    assert from_['id'] == 2
+    assert to['id'] == 4
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 4
+    assert from_['id'] == 1
+    assert to['id'] == 5
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 5
+    assert from_['id'] == 6
+    assert to['id'] == 5
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 6
+    assert from_['id'] == 6
+    assert to['id'] == 7
+
+    try:
+        next(it)
+        assert 0, 'iterator should have no more elements'
+    except StopIteration:
+        pass
+
+def test_edgewalk_bfs():
+    cf = CamFlowBackend(open(EDGES_MSGBUF, 'rb'))
+    it = cf.walk_edges(TraversalOrder.BFS)
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 1
+    assert from_['id'] == 1
+    assert to['id'] == 2
+    assert edge['type'] == 'named'
+    assert edge['allowed'] == 0
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 4
+    assert from_['id'] == 1
+    assert to['id'] == 5
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 5
+    assert from_['id'] == 6
+    assert to['id'] == 5
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 6
+    assert from_['id'] == 6
+    assert to['id'] == 7
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 2
+    assert from_['id'] == 2
+    assert to['id'] == 3
+
+    (edge, from_, to) = next(it)
+    assert edge['id'] == 3
+    assert from_['id'] == 2
+    assert to['id'] == 4
+
+    try:
+        next(it)
+        assert 0, 'iterator should have no more elements'
+    except StopIteration:
+        pass
+
 HAS_NULL_MSGBUF = os.path.join(os.path.dirname(__file__), "inputs", "has_null.txt")
 def test_drop_nulls():
     cf = CamFlowBackend(open(HAS_NULL_MSGBUF, 'rb'))
-    assert len(list(cf.walk(TraversalOrder.DFS))) == 2
+    assert len(list(cf.walk_nodes(TraversalOrder.DFS))) == 2
 
 UNICODE_MSGBUF = os.path.join(os.path.dirname(__file__), "inputs", "unicode.txt")
 def test_unicode():
     cf = CamFlowBackend(open(UNICODE_MSGBUF, 'rb'))
-    it = cf.walk(TraversalOrder.BFS)
+    it = cf.walk_nodes(TraversalOrder.BFS)
 
     node = next(it)
     assert node['id'] == 218451
@@ -126,4 +210,4 @@ def test_unicode():
 EMPTY_MSGBUF = os.path.join(os.path.dirname(__file__), "inputs", "empty.txt")
 def test_empty():
     cf = CamFlowBackend(open(EMPTY_MSGBUF, 'rb'))
-    assert [] == list(cf.walk(TraversalOrder.DFS))
+    assert [] == list(cf.walk_nodes(TraversalOrder.DFS))

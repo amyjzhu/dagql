@@ -1,0 +1,18 @@
+Provenance: loading new query... (provenance2json)
+dagql: #start
+Provenance: registering policy hook...
+comment:
+comment: Yes, this test is contrived.
+comment:
+comment:           1     6
+comment:         /   \ /   \
+comment:        2     5     7
+comment:       / \
+comment:      3   4
+comment:
+dagql: [{"id": 1}, {"id": 1, "type": "named", "allowed": 0}, {"id": 2}]
+dagql: [{"id": 2}, {"id": 2, "type": "perm_read", "allowed": 0}, {"id": 3}]
+dagql: [{"id": 2}, {"id": 3, "type": "version_entity", "allowed": 0}, {"id": 4}]
+dagql: [{"id": 1}, {"id": 4, "type": "named", "allowed": 0}, {"id": 5}]
+dagql: [{"id": 6}, {"id": 5, "type": "named", "allowed": 0}, {"id": 5}]
+dagql: [{"id": 6}, {"id": 6, "type": "named", "allowed": 0}, {"id": 7}]
