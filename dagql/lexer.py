@@ -110,7 +110,7 @@ class Lexer:
             elif self.current_char == "'": # strings
                 self._advance()
                 self._str()
-            elif self.current_char == '.' and self._peek() and not self._peek().isnum():
+            elif self.current_char == '.' and self._peek() and not self._peek().isdigit():
                 self._add_token_1_char(TokenTypes.DOT)
             elif self.current_char.isdigit() or self.current_char == '.': # numbers
                 self._num()
