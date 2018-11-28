@@ -1,4 +1,4 @@
-# Provenance Graph Query Language
+# Provenance (and Directed Acylcic) Graph Query Language
 ### Background context
 https://arxiv.org/pdf/1808.06049.pdf
 ### Presentation version
@@ -11,5 +11,3 @@ A professor at UBC, Margo Seltzer (who did this work at Harvard), did some work 
 Steve: https://en.wikipedia.org/wiki/Cypher_Query_Language  
 Margo:https://people.seas.harvard.edu/~chong/pubs/pldi15-pidgin.pdf  
 Paper: https://arxiv.org/pdf/1806.09339.pdf
-
-[ ]assdfasdf
