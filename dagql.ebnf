@@ -19,7 +19,7 @@ add-expr ::= mul-expr ( ("+" | "-") mul-expr)*
 mul-expr ::= unary-expr ( ("*" | "/" unary-expr)*
 unary-expr ::= ("+" | "-") unary-expr | attr | literal
 attr ::= ID "." ID
-literal ::= STR | ID | BOOL
+literal ::= STR | NUM | BOOL
 
 (* most literals should be pretty easy to understand, but a regex for each is provided here. *)
 BOOL ::= "TRUE" | "FALSE"
