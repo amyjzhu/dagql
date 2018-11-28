@@ -1,28 +1,28 @@
-query = "SELECT" expr ("," expr)*
+query ::= "SELECT" expr ("," expr)*
         "FROM" subquery "AS" ID ( "(" ID "," ID ")" )?
         ("TRAVERSE" "BY" ("DEPTH" | "BREADTH"))?
 
-subquery = "SEARCH" subquery
+subquery ::= "SEARCH" subquery
            ("AS" ID ( "(" ID "," ID ")" )? "WHERE" expr)?
            ("LIMIT" expr)? 
           | "EDGES"
           | "NODES"
 
 (* expressions are grouped by precedence for readability *)
-expr = or-expr
-or-expr = and-expr ("OR" and-expr)*
-and-expr = not-expr ("AND" not-expr)*
-not-expr = "NOT" not-expr | comparison-expr
-comparison-expr = concat-expr ( (">" | "<" | ">=" | "<=" | "=" | "<>") concat-expr)*
-concat-expr = add-expr ("||" add-expr)*
-add-expr = mul-expr ( ("+" | "-") mul-expr)*
-mul-expr = unary-expr ( ("*" | "/" unary-expr)*
-unary-expr = ("+" | "-") unary-expr | attr | literal
-attr = ID "." ID
-literal = STR | ID | BOOL
+expr ::= or-expr
+or-expr ::= and-expr ("OR" and-expr)*
+and-expr ::= not-expr ("AND" not-expr)*
+not-expr ::= "NOT" not-expr | comparison-expr
+comparison-expr ::= concat-expr ( (">" | "<" | ">=" | "<=" | "=" | "<>") concat-expr)*
+concat-expr ::= add-expr ("||" add-expr)*
+add-expr ::= mul-expr ( ("+" | "-") mul-expr)*
+mul-expr ::= unary-expr ( ("*" | "/" unary-expr)*
+unary-expr ::= ("+" | "-") unary-expr | attr | literal
+attr ::= ID "." ID
+literal ::= STR | ID | BOOL
 
 (* most literals should be pretty easy to understand, but a regex for each is provided here. *)
-BOOL = "TRUE" | "FALSE"
-ID = /[A-Za-z_][A-Za-z0-9_]/
-STR = /'[^']*'/
-NUM = /[0-9]+(\.[0-9]*)?|\.[0-9]+/
+BOOL ::= "TRUE" | "FALSE"
+ID ::= /[A-Za-z_][A-Za-z0-9_]/
+STR ::= /'[^']*'/
+NUM ::= /[0-9]+(\.[0-9]*)?|\.[0-9]+/
