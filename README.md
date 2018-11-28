@@ -1,4 +1,4 @@
-# Provenance (and Directed Acylcic) Graph Query Language
+# Provenance (and Directed Acyclic) Graph Query Language
 ### Background context
 https://arxiv.org/pdf/1808.06049.pdf
 ### Presentation version
