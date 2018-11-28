@@ -1,32 +1,32 @@
 (* we possibly do not want to include sub-queries in FROM *)
 query = "SELECT" expr ("," expr)*
         "FROM" subquery "AS" ID ( "(" ID "," ID ")" )?
-        ("TRAVERSE" "BY" ("DEPTH" | "BREADTH"))?
+        ("TRAVERSE" "BY" ("DEPTH" | "BREADTH"))?;
 
 subquery = ("SEARCH" subquery | "EDGES" | "NODES")
            ("AS" ID ( "(" ID "," ID ")" )? "WHERE" expr)?
-           ("LIMIT" expr)?
+           ("LIMIT" expr)?;
          
 (* attr will just be a valid indentifier in DAGQL. *)
-attr = ID
+attr = ID;
 cond = "TRUE"
      | "FALSE"
      | expr (">" | "<" | ">=" | "<=" | "=" | "<>") expr
      | "NOT" cond
      | cond ("AND" | "OR") cond
-     | "(" cond ")"
+     | "(" cond ")";
  
  (* it's legal to use values selected from the graph in expressions *)
-expr = num-expr | str-expr | "(" expr ")" | attr
+expr = num-expr | str-expr | "(" expr ")" | attr;
 (* NUM is a numeric literal, I'll omit it for now from the EBNF *)
 num-expr = NUM
          | ("+" | "-") num-expr
-         | num-expr ("+" | "-" | "*" | "/") num-expr
+         | num-expr ("+" | "-" | "*" | "/") num-expr;
          
 (* STR is a string literal, I'll omit details for now from the EBNF *)
 (* || is string concat, as in standard SQL *)
 str-expr = STR
-         | str-expr "||" str-expr
+         | str-expr "||" str-expr;
          
 (* Precedence Table for operators (tightest to loosest)
    + - (unary)
