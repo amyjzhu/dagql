@@ -15,10 +15,7 @@ def main():
         lexer = Lexer(text)
         parser = Parser(lexer.lex())
         statements = parser.parse() # = Interpreter(parser)
-        #resolver = Resolver(compiler)
-        #resolver.resolve(statements)
         result = compiler.compile(statements)
-        #print([hex(r) for r in result])
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
@@ -28,10 +25,4 @@ if __name__ == "__main__":
         text = open(sys.argv[1]).read() #TODO: make more general, so file can be located anywhere
         statements = Parser(Lexer(text).lex()).parse()
         compiler = Compiler()
-        result = compiler.compile(statements)
-        print(result)
-        #print([hex(r) for r in result])
-        #sys.stdout = open("source.yb", "wb")
-        # for h in [hex(r) for r in result+[HALT]:
-        #    print r
-        # f = open(sys.argv[1].rstrip("ysl") + "yb", "wb")
+        compiler.compile(statements)

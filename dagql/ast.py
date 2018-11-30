@@ -2,7 +2,8 @@ class AST:
     pass
 
 class SelectEdge(AST):
-    def __init__(self, edge, start, end, subquery, traversal_order):
+    def __init__(self, exprs, edge, start, end, subquery, traversal_order):
+        self.exprs = exprs
         self.edge = edge
         self.start = start
         self.end = end
@@ -10,10 +11,27 @@ class SelectEdge(AST):
         self.traversal_order = traversal_order
 
 class SelectNode(AST):
-    def __init__(self, node, subquery, traversal_order):
+    def __init__(self, exprs, node, subquery, traversal_order):
+        self.exprs = exprs
         self.node = node
         self.subquery = subquery
         self.traversal_order = traversal_order
+
+class SearchEdge(AST):
+    def __init__(self, subquery, edge, start, end, where, limit):
+        self.subquery = subquery
+        self.edge = edge
+        self.start = start
+        self.end = end
+        self.where = where
+        self.limit = limit
+
+class SearchNode(AST):
+    def __init__(self, subquery, node, where, limit):
+        self.subquery = subquery
+        self.node = node
+        self.where = where
+        self.limit = limit
 
 class Where(AST):
     def __init__(self, query, cond):
@@ -56,7 +74,16 @@ class Number(AST):
 
 class Var(AST):
     # ID
-    def __init__(self, token):
-        self.token = token
-        self.value = token.value
+    def __init__(self, var, attr):
+        self.var = var
+        self.attr = attr
+
+class Edges(AST):
+    def __init__(self):
+        pass
+
+class Nodes(AST):
+    def __init__(self):
+        pass
+
 

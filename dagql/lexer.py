@@ -11,10 +11,14 @@ ESCCHARS = {
 RESERVED_WORDS = {
     "SELECT",
     "FROM",
+    "AS",
+    "NODES",
+    "EDGES",
     "TRAVERSE",
     "BY",
     "DEPTH",
     "BREADTH",
+    "SEARCH",
     "WHERE",
     "LIMIT",
 }
@@ -119,6 +123,6 @@ class Lexer:
             elif self.current_char == ")": self._add_token_1_char(TokenTypes.RPAR)
             elif self.current_char == ",": self._add_token_1_char(TokenTypes.COMMA)
             elif self._peek() is not None and self.current_char + self._peek() in (">=", "<=", "<>", "||"): self._add_token_2_char(TokenTypes.OP)
-            elif self.current_char in (">", "<", "=", "+", "-", "/", "*"): self._add_token_1_char(TokenTypes.OP)
+            elif self.current_char in (">", "<", "=", "+", "-", "/", "*", "%"): self._add_token_1_char(TokenTypes.OP)
             else: self._error("unknown sequence")
         return self.tokens
