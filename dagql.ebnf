@@ -2,9 +2,9 @@ query ::= "SELECT" expr ("," expr)*
         "FROM" subquery "AS" ID ( "(" ID "," ID ")" )?
         ("TRAVERSE" "BY" ("DEPTH" | "BREADTH"))?
 
-subquery ::= "SEARCH" subquery
+subquery ::= "(" "SEARCH" subquery
            ("AS" ID ( "(" ID "," ID ")" )? "WHERE" expr)?
-           ("LIMIT" expr)? 
+           ("LIMIT" expr)? ")"
           | "EDGES"
           | "NODES"
 
