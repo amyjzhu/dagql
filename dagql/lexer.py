@@ -23,7 +23,7 @@ RESERVED_WORDS = {
     "LIMIT",
 }
 
-class LexingError(Exception):
+class LexerError(Exception):
     pass
 
 class Lexer:
@@ -34,7 +34,7 @@ class Lexer:
         self.current_char = self.text[0] # current char
         self.tokens = []         # tokens so far
     def _error(self, msg):
-        raise LexingError("Error in line " + str(self.line) + ": " + msg)
+        raise LexerError("Error in line " + str(self.line) + ": " + msg)
     def _peek(self, lookahead=1):
         _peek_pos = self.pos + lookahead
         if _peek_pos >= len(self.text):

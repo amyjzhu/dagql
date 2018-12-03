@@ -1,10 +1,10 @@
-from .lexer import Lexer
-from .parser import Parser
-from .compiler import Compiler
+from .lexer import Lexer, LexerError
+from .parser import Parser, ParserError
+from .interpreter import Interpreter, InterpreterError
 import sys
 
 def main():
-    compiler = Compiler()
+    compiler = Interpreter()
     while True:
         try:
             text = input("DAGQL> ")
@@ -23,6 +23,9 @@ if __name__ == "__main__":
     else:
         assert(len(sys.argv) == 2)
         text = open(sys.argv[1]).read() #TODO: make more general, so file can be located anywhere
-        statements = Parser(Lexer(text).lex()).parse()
-        compiler = Compiler()
-        compiler.compile(statements)
+        try:
+            statements = Parser(Lexer(text).lex()).parse()
+            compiler = Interpreter()
+            compiler.compile(statements)
+        except (LexerError, ParserError, InterpreterError) as e:
+            print(e)

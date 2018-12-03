@@ -8,6 +8,9 @@ from .ast import *
 #                                                                             #
 ###############################################################################
 
+class ParserError(Exception):
+    pass
+
 class Parser(object):
     def __init__(self, tokens):
         self.tokens = tokens
@@ -22,8 +25,8 @@ class Parser(object):
             self.current_token = Token(TokenTypes.EOF, None, self.tokens[-1].line)
         #self.next_token = self.tokens[self.pos]
     def error(self,token_type=None):
-        raise Exception("Expected %s Token in line %s, got %s" % \
-            (token_type, self.current_token.line, self.current_token.type))
+        raise ParserError("Error:Expected %s in line %s, got `%s`." % \
+            (token_type, self.current_token.line, self.current_token))
     def eat(self, token_type):
         if self.current_token.type is token_type:
             result = self.current_token
@@ -37,9 +40,13 @@ class Parser(object):
             self.advance()
             return result
         else:
-            for i in args:
-                print(i)
-            self.error(TokenTypes.KW)
+            if len(args) == 1:
+                self.error('`' + args[0] + '`')
+            else:
+                msg = "one of "
+                for i in args:
+                    msg += '`' + i + '`, '
+                self.error(msg.strip(', '))
     def program(self):
         return self.select()
     def select(self):

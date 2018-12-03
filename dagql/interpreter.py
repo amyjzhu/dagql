@@ -1,7 +1,6 @@
 import os
 
 from .visitor import *
-from .environment import Env
 from .ast import *
 from dagql.backend import Backend, Node, TraversalOrder
 from dagql.backends.camflow import CamFlowBackend
@@ -33,7 +32,10 @@ UNOPS = {
 #                                                                             #
 ###############################################################################
 
-class Compiler(NodeVisitor):
+class InterpreterError(Exception):
+    pass
+
+class Interpreter(NodeVisitor):
     def __init__(self):
         BASIC_MSGBUF = os.path.join(os.path.dirname(__file__), "..", "test", "inputs", "basic.txt")
         self.graph = CamFlowBackend(open(BASIC_MSGBUF, 'rb'))
@@ -94,9 +96,9 @@ class Compiler(NodeVisitor):
                     'end': node.end
                 }
                 for s in subquery(order):
-                    local['$edge'] = edge
-                    local['$start'] = start
-                    local['$end'] = end
+                    local['$edge'] = node.edge
+                    local['$start'] = node.start
+                    local['$end'] = node.end
                     if self.visit(node.where, local):
                         yield s
             return f
@@ -150,23 +152,23 @@ class Compiler(NodeVisitor):
     def visit_BinOp(self, node, env):
         left = self.visit(node.left, env)
         if (node.op.value == "AND" or node.op.value == "OR") and type(left) is not bool:
-            raise Exception("Boolean expected")
+            raise InterpreterError("Boolean expected")
         elif node.op.value == "AND" and left == False:
             return False
         elif node.op.value == "OR" and left == True:
             return True
         right = self.visit(node.right, env)
         if node.op.value in ('AND', 'OR') and type(right) is not bool:
-            raise Exception("Boolean expected")
+            raise InterpreterError("Boolean expected")
         elif node.op.value in ('*', '/', '+', '-') and (type(left) is not float or type(left) is not float):
-            raise Exception("Number expected")
+            raise InterpreterError("Number expected")
         op = BINOPS.get(node.op.value)
         assert(op)
         return op(left, right)
     def visit_UnOp(self, node, env):
         expr = self.visit(node.expr)
         if type(expr) is not float:
-            raise Exception("Number expected")
+            raise InterpreterError("Number expected")
         op = UNOPS.get(node.op)
         assert(op)
         return op(expr)
@@ -181,7 +183,7 @@ class Compiler(NodeVisitor):
                 return env['$end'][node.attr.value]
             elif env['edge'].value == node.var.value:
                 return env['$edge'][node.attr.value]
-        raise Exception("invalid id")
+        raise InterpreterError("invalid id")
     def visit_String(self, node, env):
         assert(type(node.value) is str)
         return node.value
