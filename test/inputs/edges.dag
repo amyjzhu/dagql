@@ -1,0 +1,1 @@
+SELECT a.id, b.id FROM EDGES AS e(a, b) TRAVERSE BY DEPTH 

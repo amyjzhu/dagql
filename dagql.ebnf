@@ -1,40 +1,28 @@
-(* we possibly do not want to include sub-queries in FROM *)
-query = "SELECT" (attr ("," attr)* | "*")
-        "FROM" ("EDGES" | "NODES" | query | "(" query ")")
+query ::= "SELECT" expr ("," expr)*
+        "FROM" subquery "AS" ID ( "(" ID "," ID ")" )?
         ("TRAVERSE" "BY" ("DEPTH" | "BREADTH"))?
-        ("WHERE" cond)?
-        ("LIMIT" num-expr)?
 
-(* attr will just be a valid indentifier in DAGQL. )
-attr = ID
+subquery ::= "(" "SEARCH" subquery
+           ("AS" ID ( "(" ID "," ID ")" )? "WHERE" expr)?
+           ("LIMIT" expr)? ")"
+          | "EDGES"
+          | "NODES"
 
-cond = "TRUE"
-     | "FALSE"
-     | expr (">" | "<" | ">=" | "<=" | "=" | "<>") expr
-     | "NOT" cond
-     | cond ("AND" | "OR") cond
-     | "(" cond ")"
- 
- (* it's legal to use values selected from the graph in expressions *)
-expr = num-expr | str-expr | "(" expr ")" | attr
+(* expressions are grouped by precedence for readability *)
+expr ::= or-expr
+or-expr ::= and-expr ("OR" and-expr)*
+and-expr ::= not-expr ("AND" not-expr)*
+not-expr ::= "NOT" not-expr | comparison-expr
+comparison-expr ::= concat-expr ( (">" | "<" | ">=" | "<=" | "=" | "<>") concat-expr)*
+concat-expr ::= add-expr ("||" add-expr)*
+add-expr ::= mul-expr ( ("+" | "-") mul-expr)*
+mul-expr ::= unary-expr ( ("*" | "/" unary-expr)*
+unary-expr ::= ("+" | "-") unary-expr | attr | literal
+attr ::= ID "." ID
+literal ::= STR | NUM | BOOL
 
-(* NUM is a numeric literal, I'll omit it for now from the EBNF *)
-num-expr = NUM
-         | ("+" | "-") num-expr
-         | num-expr ("+" | "-" | "*" | "/") num-expr
-         
-(* STR is a string literal, I'll omit details for now from the EBNF *)
-(* || is string concat, as in standard SQL *)
-str-expr = STR
-         | str-expr "||" str-expr
-         
-(* Precedence Table for operators (tightest to loosest)
-   + - (unary)
-   * /
-   + - (binary) 
-   ||
-   = <> < > <= >=
-   NOT
-   AND
-   OR
-*)   
+(* most literals should be pretty easy to understand, but a regex for each is provided here. *)
+BOOL ::= "TRUE" | "FALSE"
+ID ::= /[A-Za-z_][A-Za-z0-9_]/
+STR ::= /'[^']*'/
+NUM ::= /[0-9]+(\.[0-9]*)?|\.[0-9]+/
