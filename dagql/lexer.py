@@ -1,4 +1,4 @@
-from tokens import TokenTypes, Token
+from .tokens import TokenTypes, Token
 
 ESCCHARS = {
     "n":  "\n",
