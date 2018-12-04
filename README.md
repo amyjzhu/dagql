@@ -11,3 +11,9 @@ A professor at UBC, Margo Seltzer (who did this work at Harvard), did some work 
 Steve: https://en.wikipedia.org/wiki/Cypher_Query_Language  
 Margo:https://people.seas.harvard.edu/~chong/pubs/pldi15-pidgin.pdf  
 Paper: https://arxiv.org/pdf/1806.09339.pdf
+
+### Usage
+DAGQL can be run from the command-line using `python3 -m dagql sample.dag`, where `python3` is any Python 3 interpreter, and `sample.dag` is any file containing a DAGQL query. Note that the interpreter provided here is hooked up to mock data for testing purposes, but it can be easily modified to use real data.
+
+### Language reference
+The language is briefly explained (with an example!) on the GH wiki pages for this repo.
